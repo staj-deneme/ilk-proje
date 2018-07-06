@@ -12,7 +12,7 @@ html
 			.logo: h1 Çiftlik Bank
 
 			.login-box
-				form.login-form(action="/")
+				form.login-form(action="/",method="post")
 					h3.login-head
 						i.fa.fa-lg.fa-fw.fa-user
 						| Giriş Yap
@@ -67,8 +67,9 @@ html
 							a.btn.btn-success(href="#" data-toggle="flip",style="margin: 10px auto;display: block;") <i class="fa fa-angle-left fa-fw"></i> Giriş Ekranına Geri Dön
 
 					div.clearfix
-
-
+		if viewData.hata
+			div.hatabildirimi Hatalı Kullanıcı Adı veya Şifre
+		
 		include includes/_javascript.jade
 
 		script(type="text/javascript").

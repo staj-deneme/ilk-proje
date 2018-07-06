@@ -1,11 +1,65 @@
 var express = require('express');
 var router = express.Router();
 
-var fs=require("fs");
+var fs = require("fs");
+
+
+var middleware = {
+  requireAuthentication: function (req, res, next) {
+    if (req.session.account) {
+
+      fs.readFile('./members.json', 'utf8', function (err, data) {
+        if (err) throw err;
+        var dizi = JSON.parse(data);
+        var dizi = dizi.members;
+        var varmi = false;
+        for (let i = 0; i < dizi.length; i++) {
+          if (dizi[i].userName == req.session.account.userName && dizi[i].password == req.session.account.password) {
+            varmi = true;
+          }
+        }
+        if (varmi == true) {
+          next();
+        }else{
+          res.redirect('/login');
+        }
+      });
+
+    }else{
+      res.redirect('/login');
+    }
+  }
+}
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', middleware.requireAuthentication, function (req, res, next) {
   res.render('index');
+});
+
+router.post('/', function (req, res, next) {
+  fs.readFile('./members.json', 'utf8', function (err, data) {
+    if (err) throw err;
+
+    var dizi = JSON.parse(data);
+    var dizi = dizi.members;
+    var varmi = false;
+    var account;
+    for (let i = 0; i < dizi.length; i++) {
+      if (dizi[i].userName == req.body.kadi && dizi[i].password == req.body.sifre) {
+        varmi = true;
+        account = dizi[i];
+      }
+    }
+    var data = {
+      hata: true
+    }
+    if (varmi == true) {
+      req.session.account = account;
+      /* console.log(req.session.account); */
+      res.redirect('/');
+    }
+    else { res.render('page-login', { viewData: data }) }
+  });
 });
 
 router.post('/login', function (req, res, next) {
@@ -42,10 +96,20 @@ router.post('/login', function (req, res, next) {
 });
 
 router.get('/login', function (req, res, next) {
-  res.render('page-login');
+  var data = {
+    hata: false
+  };
+  res.render('page-login', { viewData: data });
 });
 
-router.get('/blank', function (req, res, next) {
+
+router.get('/blank',middleware.requireAuthentication, function (req, res, next) {
   res.render('blank-page');
 });
+
+router.get('/logout', function (req, res, next) {
+  req.session.destroy();
+  res.redirect('/login');
+});
+
 module.exports = router;

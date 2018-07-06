@@ -9,9 +9,24 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+const session = require('express-session');
+
+app.use(session({
+  secret: 'omer5000',
+  resave: false,
+  saveUninitialized: true
+}));
+
 // view engine setup
+
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+app.use(function(req,res,next){
+  res.locals.account = req.session.account;
+  next();
+});
 
 app.use(logger('dev'));
 app.use(express.json());
