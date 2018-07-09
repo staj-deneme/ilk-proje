@@ -15246,3 +15246,15 @@ be a descendant of the grid when it is being dragged.
   color: white;
   text-align: center;
 }
+
+.basaribildirimi{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 235px;
+  padding: 20px;
+  border-radius: 3px;
+  background-color: #28a745;
+  color: white;
+  text-align: center;
+}

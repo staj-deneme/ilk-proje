@@ -16,6 +16,7 @@ var middleware = {
         for (let i = 0; i < dizi.length; i++) {
           if (dizi[i].userName == req.session.account.userName && dizi[i].password == req.session.account.password) {
             varmi = true;
+            req.session.account=dizi[i];
           }
         }
         if (varmi == true) {
@@ -36,6 +37,10 @@ router.get('/', middleware.requireAuthentication, function (req, res, next) {
   res.render('index');
 });
 
+router.get('/hayvan-yem-al', middleware.requireAuthentication, function (req, res, next) {
+  res.render('hayvan-al');
+});
+
 router.post('/', function (req, res, next) {
   fs.readFile('./members.json', 'utf8', function (err, data) {
     if (err) throw err;
@@ -51,11 +56,12 @@ router.post('/', function (req, res, next) {
       }
     }
     var data = {
-      hata: true
+      hata: true,
+      kayitSuccess: null
     }
     if (varmi == true) {
       req.session.account = account;
-      /* console.log(req.session.account); */
+      console.log(req.session.account.resources.cow.length);
       res.redirect('/');
     }
     else { res.render('page-login', { viewData: data }) }
@@ -87,17 +93,32 @@ router.post('/login', function (req, res, next) {
       }
     });
     fs.writeFile('./members.json', JSON.stringify(dizi), 'utf8', function (err) {
-      if (err) throw err;
+      if (err){
+        var data = {
+          hata: false,
+          kayitSuccess: false
+        };
+        res.render('page-login', { viewData: data });
+      }
+      else{
+        var data = {
+          hata: false,
+          kayitSuccess: true
+        };
+        res.render('page-login', { viewData: data });
+      }
+      
     });
   });
-  res.render('page-login');
+  
 
 
 });
 
 router.get('/login', function (req, res, next) {
   var data = {
-    hata: false
+    hata: false,
+    kayitSuccess: null
   };
   res.render('page-login', { viewData: data });
 });

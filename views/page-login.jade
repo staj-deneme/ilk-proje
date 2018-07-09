@@ -69,7 +69,11 @@ html
 					div.clearfix
 		if viewData.hata
 			div.hatabildirimi Hatalı Kullanıcı Adı veya Şifre
-		
+		if viewData.kayitSuccess
+			div.basaribildirimi Kayıt Başarı İle Gerçekleştirildi
+		else if viewData.kayitSuccess == false
+			div.hatabildirimi Kayıt Gerçekleşirken Bir Hata Oluştu
+			
 		include includes/_javascript.jade
 
 		script(type="text/javascript").
