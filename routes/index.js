@@ -142,12 +142,14 @@ function tuketimKaynak(i) {
 function olum(i) {
   return new Promise(function (resolve, reject) {
     fs.readFile('./history.json', 'utf8', function (err, data) {
+      if (err) throw err
       fs.readFile('./members.json', 'utf8', function (err, data2) {
         if (err) throw err
 
         var dizi = JSON.parse(data); // history
         var dizi2 = JSON.parse(data2); // members
-
+        console.log(dizi2);
+        
         //inek
         {
           if (dizi.members[i].cow == null) {
@@ -159,8 +161,8 @@ function olum(i) {
               var now = new Date();
               var dif = fonk.diffMin(now, btime);
               if (dif >= 30) {
-                var del = dizi.members[0].cow.splice(j, 1);
-                var del2 = dizi2.members[0].resources.cow.splice(j, 1);
+                var del = dizi.members[i].cow.splice(j, 1);
+                var del2 = dizi2.members[i].resources.cow.splice(j, 1);
               }
             }
           }
@@ -176,8 +178,8 @@ function olum(i) {
               var now = new Date();
               var dif = fonk.diffMin(now, btime);
               if (dif >= 15) {
-                var del = dizi.members[0].bee.splice(j, 1);
-                var del2 = dizi2.members[0].resources.bee.splice(j, 1);
+                var del = dizi.members[i].bee.splice(j, 1);
+                var del2 = dizi2.members[i].resources.bee.splice(j, 1);
               }
             }
           }
@@ -193,17 +195,15 @@ function olum(i) {
               var now = new Date();
               var dif = fonk.diffMin(now, btime);
               if (dif >= 10) {
-                var del = dizi.members[0].chicken.splice(j, 1);
-                var del2 = dizi2.members[0].resources.chicken.splice(j, 1);
+                var del = dizi.members[i].chicken.splice(j, 1);
+                var del2 = dizi2.members[i].resources.chicken.splice(j, 1);
               }
 
             }
           }
         }
-        fs.writeFile('./history.json', JSON.stringify(dizi), 'utf8',
-          function (err) {
-            if (err) throw err
-          });
+
+        fs.writeFile('./history.json', JSON.stringify(dizi), 'utf8', function () { });
         fs.writeFile('./members.json', JSON.stringify(dizi2), 'utf8',
           function (err) {
             if (err) throw err
@@ -245,9 +245,9 @@ var middleware = {
 router.get('/', middleware.requireAuthentication, function (req, res, next) {
   var i = req.session.account.indis;
 
-  uretimKaynak(i).then(function (params) {
-    tuketimKaynak(i).then(function (params) {
-      olum(i).then(function (params) {
+  olum(i).then(function (params) {
+    uretimKaynak(i).then(function (params) {
+      tuketimKaynak(i).then(function (params) {
         res.render('index');
       });
     });
