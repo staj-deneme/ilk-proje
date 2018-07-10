@@ -27,7 +27,11 @@ block content
 					br 
 					span #{account.resources.cow.length} Adet
 				hr
-				a.btn.btn-success.btn-block(href="#") Satın Al
+				form(action="hayvan-yem-al",method="post")
+					input(type="hidden",name="islem",value="cow")
+					button.btn.btn-success.btn-block(type="submit") Satın Al
+
+
 		div.col-md-3.col-lg-3(style="margin-bottom:20px")
 			div.widget-small.warning.coloured-icon(style="width: 170px;margin: 0px auto;")
 				i.icon(style="padding:10px;") 
@@ -40,7 +44,12 @@ block content
 					br 
 					span #{account.resources.chicken.length} Adet
 				hr
-				a.btn.btn-success.btn-block(href="#") Satın Al
+				form(action="hayvan-yem-al",method="post")
+					input(type="hidden",name="islem",value="chicken")
+					button.btn.btn-success.btn-block(type="submit") Satın Al
+
+
+		
 		div.col-md-3.col-lg-3(style="margin-bottom:20px")
 			div.widget-small.info.coloured-icon(style="width: 170px;margin: 0px auto;")
 				i.icon(style="padding:10px;") 
@@ -53,7 +62,11 @@ block content
 					br 
 					span #{account.resources.bee.length} Adet
 				hr
-				a.btn.btn-success.btn-block(href="#") Satın Al
+				form(action="hayvan-yem-al",method="post")
+					input(type="hidden",name="islem",value="bee")
+					button.btn.btn-success.btn-block(type="submit") Satın Al
+				
+
 		div.col-md-3.col-lg-3(style="margin-bottom:20px")
 			div.widget-small.danger.coloured-icon(style="width: 170px;margin: 0px auto;")
 				i.icon(style="padding:10px;") 
@@ -66,7 +79,14 @@ block content
 					br 
 					span #{account.resources.seed} Adet
 				hr
-				a.btn.btn-success.btn-block(href="#") Satın Al
+				form(action="hayvan-yem-al",method="post")
+					input(type="hidden",name="islem",value="seed")
+					button.btn.btn-success.btn-block(type="submit") Satın Al
+		
+	if viewData.hata
+		div.hatabildirimi Satın Alma İşlemi Sırasında Bir Hata Oluştu
+	if viewData.hata == false
+		div.basaribildirimi Satın Alma İşlemi Başarı İle Gerçekleşti
 		
 
 		
